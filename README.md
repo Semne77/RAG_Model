@@ -22,8 +22,8 @@ It demonstrates how to combine **document search** and **AI text generation** us
 ```text
 Tennis-RAG-App/
 ├── Code/
-│   ├── version2.py      # Terminal interface version
-│   └── app.py           # GUI application version
+│   ├── logic.py      # Terminal interface version
+│   └── gui_app.py           # GUI application version
 ├── data/
 │   ├── doc_file1.txt    # Sample tennis document
 │   ├── doc_file2.txt    # Additional knowledge files
