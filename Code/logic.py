@@ -103,39 +103,38 @@ def load_documents_and_build_index(data_folder=os.path.join(os.path.dirname(os.p
 
     return index, metadata, all_chunks
 
-def extract_numeric_facts(chunks, query):
-    """
-    Searches for numeric facts in the retrieved chunks
-    that match numeric information in the query.
+# def extract_numeric_facts(chunks, query):
+#     """
+#     Searches for numeric facts in the retrieved chunks
+#     that match numeric information in the query.
 
-    Args:
-        chunks (list): List of text chunks.
-        query (str): User's question.
+#     Args:
+#         chunks (list): List of text chunks.
+#         query (str): User's question.
 
-    Returns:
-        str: Direct fact answer if found, else None.
-    """
-    pattern = r'(\w+\s\w+).*?(\d+)\s.*?(Grand Slam|major|Wimbledon|US Open|Roland Garros|French Open|Australian Open).*?titles'
-    query = query.lower()
-    query_number = next((int(num) for num in re.findall(r'\d+', query)), None)
+#     Returns:
+#         str: Direct fact answer if found, else None.
+#     """
+#     pattern = r'(\w+\s\w+).*?(\d+)\s.*?(Grand Slam|major|Wimbledon|US Open|Roland Garros|French Open|Australian Open).*?titles'
+#     query = query.lower()
+#     query_number = next((int(num) for num in re.findall(r'\d+', query)), None)
 
-    for chunk in chunks:
-        match = re.search(pattern, chunk, re.IGNORECASE)
-        if match:
-            player = match.group(1)
-            num = int(match.group(2))
-            tournament = match.group(3).lower()
-            if query_number == num and tournament in query:
-                return f"✅ Answer from fact: {player}"
-    return None
+#     for chunk in chunks:
+#         match = re.search(pattern, chunk, re.IGNORECASE)
+#         if match:
+#             player = match.group(1)
+#             num = int(match.group(2))
+#             tournament = match.group(3).lower()
+#             if query_number == num and tournament in query:
+#                 return f"✅ Answer from fact: {player}"
+#     return None
 
 def ask_question(query):
     """
     Handles the full RAG pipeline:
     1. Loads documents & builds FAISS index.
     2. Retrieves top-k matching chunks.
-    3. Checks for direct numeric fact match.
-    4. If no fact match, uses FLAN-T5 to generate answer.
+    3. Uses FLAN-T5 to generate answer.
 
     Args:
         query (str): User's question.
@@ -155,14 +154,7 @@ def ask_question(query):
     for rank, chunk_text in enumerate(top_k_chunks):
         print(f"\n#{rank+1}:\n📄 {chunk_text}")
 
-    # Step 2: Numeric fact matching
-    fact_match = extract_numeric_facts(top_k_chunks, query)
-    if fact_match:
-        print("\n🧠 Using numeric match...")
-        print("🧠 Final Answer:\n", fact_match)
-        return fact_match
-
-    # Step 3: Context for generator
+    # Step 2: Context for generator
     max_input_tokens = 1024
     context = ""
     total_tokens = 0
@@ -173,7 +165,7 @@ def ask_question(query):
         context += chunk + "\n\n"
         total_tokens += len(tokens)
 
-    # Step 4: Prompt & generate answer
+    # Step 3: Prompt & generate answer
     prompt = f"""Answer the following question using the context below:
 
 Context:
