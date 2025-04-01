@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import scrolledtext
-from logic import ask_question  # Your existing function
+from logic import ask_question  
 
 class RAGApp:
     def __init__(self, root):

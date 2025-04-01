@@ -103,32 +103,6 @@ def load_documents_and_build_index(data_folder=os.path.join(os.path.dirname(os.p
 
     return index, metadata, all_chunks
 
-# def extract_numeric_facts(chunks, query):
-#     """
-#     Searches for numeric facts in the retrieved chunks
-#     that match numeric information in the query.
-
-#     Args:
-#         chunks (list): List of text chunks.
-#         query (str): User's question.
-
-#     Returns:
-#         str: Direct fact answer if found, else None.
-#     """
-#     pattern = r'(\w+\s\w+).*?(\d+)\s.*?(Grand Slam|major|Wimbledon|US Open|Roland Garros|French Open|Australian Open).*?titles'
-#     query = query.lower()
-#     query_number = next((int(num) for num in re.findall(r'\d+', query)), None)
-
-#     for chunk in chunks:
-#         match = re.search(pattern, chunk, re.IGNORECASE)
-#         if match:
-#             player = match.group(1)
-#             num = int(match.group(2))
-#             tournament = match.group(3).lower()
-#             if query_number == num and tournament in query:
-#                 return f"✅ Answer from fact: {player}"
-#     return None
-
 def ask_question(query):
     """
     Handles the full RAG pipeline:
