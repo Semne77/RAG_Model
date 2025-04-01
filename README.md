@@ -32,7 +32,7 @@ Tennis-RAG-App/
 │   ├── doc_file2.txt    # Additional knowledge files
 │   └── doc_file3.txt
 │── image/
-│   ├── Big3.jpg
+│   └── Big3.jpg
 ├── .gitignore
 ├── requirements.txt
 └── README.md
