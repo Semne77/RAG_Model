@@ -31,20 +31,32 @@ Tennis-RAG-App/
 ├── .gitignore
 ├── requirements.txt
 └── README.md
+```
 
 ## 🔧 Installation & Running
 
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/your-username/tennis-rag-app.git
-cd tennis-rag-app
+git clone https://github.com/Semne77/Transformer.git
+cd Transformer
+```
+### 2. Create virtual environment
 
+```bash
 python3 -m venv .venv
 source .venv/bin/activate  # Mac/Linux
 .venv\Scripts\activate     # Windows
+```
 
+### 3. Install dependencies to run the project
+```bash
 pip install -r requirements.txt
+```
 
+
+### 4. Run the program
+```bash
 cd Code
-python app.py
+python gui_app.py
+```
