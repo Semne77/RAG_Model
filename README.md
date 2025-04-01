@@ -17,7 +17,7 @@ It demonstrates how to combine **document search** and **AI text generation** us
 ✅ When the user asks a question:
 - It finds the most relevant chunks
 - It passes the context to a pre-trained language model (`Flan-T5`)  
-✅ Returns a final, AI-generated answer
+- ✅ Returns a final, AI-generated answer
 
 ---
 
