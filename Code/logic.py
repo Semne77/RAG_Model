@@ -1,3 +1,19 @@
+"""
+RAG Pipeline - Question Answering System
+
+This script implements a simple Retrieval-Augmented Generation (RAG) pipeline.
+It uses FAISS for semantic search, SentenceTransformers for embedding, 
+and Google's FLAN-T5 model for text generation.
+
+Features:
+- Loads `.txt` documents from the local 'data/' folder.
+- Splits documents into smaller chunks for better retrieval.
+- Embeds and indexes the chunks using FAISS.
+- Retrieves top-k relevant chunks based on the user's query.
+- Optionally extracts numeric facts if present in the retrieved chunks.
+- Uses FLAN-T5 to generate an answer based on the retrieved context.
+"""
+
 from sentence_transformers import SentenceTransformer
 import numpy as np
 import faiss
@@ -7,10 +23,14 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 from dotenv import load_dotenv
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-# Load environment variables
-load_dotenv()
+# =========================
+# Environment Setup
+# =========================
+load_dotenv()  # Load environment variables from .env file
 
-# Constants and setup
+# =========================
+# Model & Tokenizer Setup
+# =========================
 model_name = "google/flan-t5-base"
 tokenizer = AutoTokenizer.from_pretrained(model_name)
 tokenizer.model_max_length = 1024
@@ -25,17 +45,36 @@ generator = pipeline(
 
 embed_model = SentenceTransformer('sentence-transformers/all-mpnet-base-v2')
 
+# =========================
+# Text Splitter for Chunking
+# =========================
 splitter = RecursiveCharacterTextSplitter(
     chunk_size=450,
     chunk_overlap=50
 )
 
-# Load documents and prepare chunks
-def load_documents_and_build_index(data_folder="data"):
+# =========================
+# Functions
+# =========================
+
+def load_documents_and_build_index(data_folder=os.path.join(os.path.dirname(os.path.dirname(__file__)), "data")):
+    """
+    Loads all text documents from the data folder,
+    splits them into chunks, embeds them, and builds a FAISS index.
+
+    Args:
+        data_folder (str): Path to the folder containing text files.
+
+    Returns:
+        index (faiss.IndexFlatIP): FAISS index for similarity search.
+        metadata (list): Metadata about each text chunk.
+        all_chunks (list): List of all text chunks.
+    """
     documents = {}
     all_chunks = []
     metadata = []
 
+    # Read all .txt documents
     for filename in os.listdir(data_folder):
         if filename.endswith(".txt"):
             path = os.path.join(data_folder, filename)
@@ -45,6 +84,7 @@ def load_documents_and_build_index(data_folder="data"):
                 documents[doc_id] = text
                 print(f"✅ Loaded {doc_id}, {len(text.split())} words")
 
+    # Split documents into chunks
     for doc_id, text in documents.items():
         chunks = splitter.split_text(text)
         all_chunks.extend(chunks)
@@ -55,7 +95,7 @@ def load_documents_and_build_index(data_folder="data"):
                 "text": chunk
             })
 
-    # Embed and index
+    # Embed and build FAISS index
     embeddings = embed_model.encode(all_chunks, convert_to_numpy=True)
     faiss.normalize_L2(embeddings)
     index = faiss.IndexFlatIP(embeddings.shape[1])
@@ -63,8 +103,18 @@ def load_documents_and_build_index(data_folder="data"):
 
     return index, metadata, all_chunks
 
-# Optional numeric fact extractor
 def extract_numeric_facts(chunks, query):
+    """
+    Searches for numeric facts in the retrieved chunks
+    that match numeric information in the query.
+
+    Args:
+        chunks (list): List of text chunks.
+        query (str): User's question.
+
+    Returns:
+        str: Direct fact answer if found, else None.
+    """
     pattern = r'(\w+\s\w+).*?(\d+)\s.*?(Grand Slam|major|Wimbledon|US Open|Roland Garros|French Open|Australian Open).*?titles'
     query = query.lower()
     query_number = next((int(num) for num in re.findall(r'\d+', query)), None)
@@ -79,11 +129,23 @@ def extract_numeric_facts(chunks, query):
                 return f"✅ Answer from fact: {player}"
     return None
 
-# Main RAG function
 def ask_question(query):
+    """
+    Handles the full RAG pipeline:
+    1. Loads documents & builds FAISS index.
+    2. Retrieves top-k matching chunks.
+    3. Checks for direct numeric fact match.
+    4. If no fact match, uses FLAN-T5 to generate answer.
+
+    Args:
+        query (str): User's question.
+
+    Returns:
+        str: Final answer to the question.
+    """
     index, metadata, all_chunks = load_documents_and_build_index()
 
-    # Retrieve
+    # Step 1: Retrieve relevant chunks
     query_embedding = embed_model.encode([query], convert_to_numpy=True)
     faiss.normalize_L2(query_embedding)
     D, I = index.search(query_embedding, k=8)
@@ -93,14 +155,14 @@ def ask_question(query):
     for rank, chunk_text in enumerate(top_k_chunks):
         print(f"\n#{rank+1}:\n📄 {chunk_text}")
 
-    # Check for direct numeric match
+    # Step 2: Numeric fact matching
     fact_match = extract_numeric_facts(top_k_chunks, query)
     if fact_match:
         print("\n🧠 Using numeric match...")
         print("🧠 Final Answer:\n", fact_match)
-        return
+        return fact_match
 
-    # Otherwise, use generator
+    # Step 3: Context for generator
     max_input_tokens = 1024
     context = ""
     total_tokens = 0
@@ -111,6 +173,7 @@ def ask_question(query):
         context += chunk + "\n\n"
         total_tokens += len(tokens)
 
+    # Step 4: Prompt & generate answer
     prompt = f"""Answer the following question using the context below:
 
 Context:
@@ -118,13 +181,15 @@ Context:
 
 Question: {query}
 """
-
     print("\n🧠 Generating answer with FLAN...\n")
     response = generator(prompt, max_new_tokens=128, do_sample=False)[0]["generated_text"]
     final_answer = response.strip()
     print("🧠 Final Answer:\n", final_answer)
     return final_answer
 
+# =========================
+# CLI Interface
+# =========================
 if __name__ == "__main__":
     while True:
         query = input("\n🔍 Ask a Question (or type 'exit' to quit): ")
