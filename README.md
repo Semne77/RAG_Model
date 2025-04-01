@@ -1,6 +1,9 @@
 # 🎾 Tennis Q&A — RAG Pipeline
 
-This project is a small **Retrieval-Augmented Generation (RAG) application** built to answer tennis-related questions using a local knowledge base of `.txt` documents.
+
+![Tennis Banner](image/Big3.jpg)
+
+This project is a small **Retrieval-Augmented Generation (RAG) application** built to answer questions about Tennis "Gig 3" (Novak Djokovic, Roger Federer, Rafael Nadal) using a local knowledge base of `.txt` documents.
 
 It demonstrates how to combine **document search** and **AI text generation** using Python, FAISS, and HuggingFace models.
 
@@ -59,4 +62,14 @@ pip install -r requirements.txt
 ```bash
 cd Code
 python gui_app.py
+```
+
+## Sample Questions that you may ask:
+
+```text
+- Which player is from Spain?
+
+- Which player knows English, German and French languages?
+
+- Which player won all nine ATP Masters 1000 tournaments?
 ```
