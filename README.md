@@ -23,7 +23,7 @@ It demonstrates how to combine **document search** and **AI text generation** us
 
 ## 📂 Project Structure
 ```text
-Tennis-RAG-App/
+RAG_Model/
 ├── Code/
 │   ├── logic.py      # Terminal interface version
 │   └── gui_app.py           # GUI application version
