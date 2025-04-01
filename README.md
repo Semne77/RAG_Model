@@ -31,6 +31,8 @@ Tennis-RAG-App/
 │   ├── doc_file1.txt    # Sample tennis document
 │   ├── doc_file2.txt    # Additional knowledge files
 │   └── doc_file3.txt
+│── image/
+│    ├── Big3.jpg
 ├── .gitignore
 ├── requirements.txt
 └── README.md
