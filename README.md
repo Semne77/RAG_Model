@@ -43,7 +43,7 @@ Tennis-RAG-App/
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/Semne77/Transformer.git
+git clone https://github.com/Semne77/RAG_Model.git
 cd Transformer
 ```
 ### 2. Create virtual environment
