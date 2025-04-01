@@ -44,7 +44,7 @@ Tennis-RAG-App/
 
 ```bash
 git clone https://github.com/Semne77/RAG_Model.git
-cd Transformer
+cd RAG_Model
 ```
 ### 2. Create virtual environment
 
