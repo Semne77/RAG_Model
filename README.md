@@ -51,7 +51,7 @@ cd RAG_Model
 ```bash
 python3 -m venv .venv
 source .venv/bin/activate  # Mac/Linux
-.venv\Scripts\activate     # Windows
+. .\.venv\Scripts\Activate   # Windows
 ```
 
 ### 3. Install dependencies to run the project
@@ -65,6 +65,11 @@ pip install -r requirements.txt
 cd Code
 python gui_app.py
 ```
+
+### 5. User interface will appear
+
+![Tennis Banner](image/UserInterface.png)
+
 
 ## Sample Questions that you may ask:
 
