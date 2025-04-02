@@ -11,10 +11,10 @@ It demonstrates how to combine **document search** and **AI text generation** us
 
 ## 🚀 What this program does
 
-✅ Splits long tennis articles into small, meaningful text chunks  
-✅ Converts these chunks into vector embeddings  
-✅ Stores them in a FAISS vector database for fast similarity search  
-✅ When the user asks a question:
+1 - Splits long tennis articles into small, meaningful text chunks  
+2 - Converts these chunks into vector embeddings  
+3 - Stores them in a FAISS vector database for fast similarity search  
+4 - When the user asks a question:
 - It finds the most relevant chunks
 - It passes the context to a pre-trained language model (`Flan-T5`)  
 - ✅ Returns a final, AI-generated answer
