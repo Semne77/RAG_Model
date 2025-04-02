@@ -82,7 +82,7 @@ python gui_app.py
 ```
 
 **Note:** This project uses the Flan-T5 model from Hugging Face, which is publicly available and **does not require** an API token.
-However, if you wish to use gated models or avoid rate limits, you may add your Hugging Face API token to your environment:
+However, if you want to use gated models or avoid rate limits, you may add your Hugging Face API token to your environment:
 
    ```bash
    export HUGGINGFACEHUB_API_TOKEN=your_token_here
