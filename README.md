@@ -81,11 +81,8 @@ python gui_app.py
 - Which player won all nine ATP Masters 1000 tournaments?
 ```
 
-**Note:** This project uses the Flan-T5 model from Hugging Face. 
-To run the project, you must:
-1. Create a free Hugging Face account: https://huggingface.co/join
-2. Accept the model license agreement here: https://huggingface.co/google/flan-t5-base
-3. Add your Hugging Face API token to your environment:
+**Note:** This project uses the Flan-T5 model from Hugging Face, which is publicly available and **does not require** an API token.
+However, if you wish to use gated models or avoid rate limits, you may add your Hugging Face API token to your environment:
 
    ```bash
    export HUGGINGFACEHUB_API_TOKEN=your_token_here
