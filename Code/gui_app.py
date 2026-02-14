@@ -38,16 +38,16 @@ class RAGApp:
         self.exit_button.pack(pady=10)
 
     def get_answer(self):
-        question = self.question_entry.get().strip()
-        if question == "":
-            self.append_output("⚠️ Please enter a question.")
+        question = self.question_entry.get()
+
+        try:
+            answer = ask_question(question)
+        except ValueError as e:
+            self.append_output(f"⚠️ {str(e)}")
             return
 
-        self.append_output(f"\n🔍 Question: {question}")
+        self.append_output(f"\n🔍 Question: {question.strip()}")
         self.append_output("⏳ Searching...")
-
-        # Call your existing function
-        answer = ask_question(question)
         self.append_output(f"🧠 Answer: {answer}")
 
     def append_output(self, text):

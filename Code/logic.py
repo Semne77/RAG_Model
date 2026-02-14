@@ -103,6 +103,36 @@ def load_documents_and_build_index(data_folder=os.path.join(os.path.dirname(os.p
 
     return index, metadata, all_chunks
 
+
+# Code/logic.py
+import re
+
+ASCII_ALLOWED_RE = re.compile(r"^[\x00-\x7F]+$")  # ASCII only (English letters/numbers/symbols)
+
+def validate_question(question: str, max_words: int = 15) -> tuple[bool, str]:
+    """
+    Returns (ok, error_message). If ok=True, error_message is "".
+    Rules:
+      1) not empty
+      2) <= max_words words
+      3) ASCII only (English letters, numbers, symbols)
+    """
+    if question is None:
+        return False, "Question is required."
+
+    q = question.strip()
+    if q == "":
+        return False, "Question is required."
+
+    words = q.split()
+    if len(words) > max_words:
+        return False, f"Question must be {max_words} words or fewer."
+
+    if not ASCII_ALLOWED_RE.match(q):
+        return False, "Only English (ASCII) letters/numbers/symbols are allowed."
+
+    return True, ""
+
 def ask_question(query):
     """
     Handles the full RAG pipeline:
@@ -116,6 +146,11 @@ def ask_question(query):
     Returns:
         str: Final answer to the question.
     """
+    # ---- VALIDATION FIRST ----
+    ok, err = validate_question(query)
+    if not ok:
+        raise ValueError(err)
+    
     index, metadata, all_chunks = load_documents_and_build_index()
 
     # Step 1: Retrieve relevant chunks
