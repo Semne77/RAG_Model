@@ -1,5 +1,5 @@
 import pytest
-from Code.logic import validate_question
+from src.logic import validate_question
 
 def test_question_not_null_or_empty():
     ok, err = validate_question("")

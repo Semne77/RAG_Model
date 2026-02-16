@@ -1,4 +1,4 @@
-from Code.logic import ask_question
+from src.logic import ask_question
 
 
 def test_serbia_question_returns_djokovic():
