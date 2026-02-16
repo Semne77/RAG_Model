@@ -24,18 +24,21 @@ It demonstrates how to combine **document search** and **AI text generation** us
 ## 📂 Project Structure
 ```text
 RAG_Model/
-├── Code/
-│   ├── logic.py      # Terminal interface version
-│   └── gui_app.py           # GUI application version
 ├── data/
-│   ├── doc_file1.txt    # Sample tennis document
-│   ├── doc_file2.txt    # Additional knowledge files
+│   ├── doc_file1.txt
+│   ├── doc_file2.txt
 │   └── doc_file3.txt
-│── image/
+├── image/
 │   └── Big3.jpg
+├── src/
+│   ├── logic.py
+│   └── gui_app.py
+├── tests/
+│   ├── test_unit_rag.py
+│   └── test_integration_rag.py
 ├── .gitignore
-├── requirements.txt
-└── README.md
+├── README.md
+└── requirements.txt
 ```
 
 ## 🔧 Installation & Running
